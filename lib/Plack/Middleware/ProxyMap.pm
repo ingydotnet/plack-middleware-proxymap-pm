@@ -5,7 +5,7 @@ use warnings;
 use parent 'Plack::Middleware';
 use Plack::App::Proxy ();
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 use Carp ();
 

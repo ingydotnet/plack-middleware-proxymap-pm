@@ -63,6 +63,13 @@ USAGE NOTE
     find data, that you can subsequently display. You can also use REST APIs
     that offer JSON but not JSONP, directly from JavaScript.
 
+CREDIT
+    This is just a simple way to use Plack::App::Proxy. Thanks to Lee
+    Aylward for that work.
+
+    Thanks to Strategic Data for supporting the writing and release of this
+    module.
+
 AUTHOR
     Ingy döt Net <ingy@cpan.org>
 
