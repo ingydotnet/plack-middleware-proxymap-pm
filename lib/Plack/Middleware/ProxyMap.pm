@@ -14,8 +14,7 @@ use Carp ();
 sub call {
     my $self = shift;
     my $original_env = shift;
-    my $proxymap = shift;
-    my $urlmap = Plack::App::URLMap->new;
+    my $proxymap = $self->{proxymap};
     for my $entry (@$proxymap) {
         my (
             $prefix,
@@ -30,11 +29,13 @@ sub call {
         )};
         Carp::croak("'prefix' or 'remote' entry missing in ProxyMap entry")
             unless $prefix and $remote;
-        $preserve_host_header = 1 unless defined $preserve_host_header;
+        $preserve_host_header ||= 0;
         $env ||= {};
-        my $path = $env->{PATH_INFO};
+        my $path = $original_env->{PATH_INFO};
         if ($path =~ s/^\Q$prefix\E//) {
             my $url = "$remote$path";
+            # TODO Add logging option.
+            # warn ">>> $url<";
             return Plack::App::Proxy->new(
                 remote => $url,
                 preserve_host_header => $preserve_host_header,
@@ -50,7 +51,7 @@ sub call {
 
 =head1 NAME
 
-Plack::Middleware::ProxyMap - Proxy Various Urls to Various Remotes
+Plack::Middleware::ProxyMap - Proxy Various URLs to Various Remotes
 
 =head1 SYNOPSIS
 
@@ -67,14 +68,14 @@ Plack::Middleware::ProxyMap - Proxy Various Urls to Various Remotes
     ...
 
     builder {
-        enable "ProxyMap", $map;
+        enable "ProxyMap", proxymap => $map;
         $app;
     };
 
 =head1 DESCRIPTION
 
 This middleware allows you to easily map one or more URL prefixes to
-remote applications.
+remote URLs.
 
 It makes use of L<Plack::App::Proxy> and supports its options. It also
 makes it easy to specify custom overrides to any of the PSGI environment
@@ -100,8 +101,8 @@ tacked onto this after the C<prefix> is removed. See above.
 
 =item preserve_host_header (optional)
 
-(default) or 1. Passed through to L<Plack::App::Proxy>. See that for
-more info.
+Accepted values are 0 (default) or 1. Passed through to
+L<Plack::App::Proxy>. See that module for more info.
 
 If a proxy is not working as expected, try playing with this option.
 
@@ -136,7 +137,7 @@ Copyright (c) 2011. Ingy döt Net.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
-y
+
 See http://www.perl.com/perl/misc/Artistic.html
 
 =cut
