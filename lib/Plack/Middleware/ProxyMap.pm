@@ -127,6 +127,14 @@ you can load it into a DOM element and use things like jQuery to easily
 find data, that you can subsequently display. You can also use REST APIs
 that offer JSON but not JSONP, directly from JavaScript.
 
+=head1 CREDIT
+
+This is just a simple way to use L<Plack::App::Proxy>. Thanks to Lee
+Aylward for that work.
+
+Thanks to Strategic Data for supporting the writing and release of
+this module.
+
 =head1 AUTHOR
 
 Ingy döt Net <ingy@cpan.org>

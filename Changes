@@ -1,4 +1,9 @@
 ---
+version:
+date:
+changes:
+- Add credits to pod
+---
 version: 0.10
 date:    Wed Jan 26 20:53:29 EST 2011
 changes:
