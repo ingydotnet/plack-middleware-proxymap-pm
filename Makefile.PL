@@ -7,6 +7,7 @@ ack_xxx;
 version_check;
 
 requires 'Plack::Middleware';
+requires 'Plack::Util::Accessor';
 requires 'Plack::App::Proxy';
 
 WriteAll;

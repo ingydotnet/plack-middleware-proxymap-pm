@@ -1,4 +1,11 @@
 ---
+version: 0.12
+date:    Wed Mar 23 12:30:02 CST 2011
+changes:
+- Use REQUEST_URI instead of PATH_INFO so we get entire URI.
+- Add debug option.
+- Clear PATH_INFO QUERY_STRING and HTTP_COOKIE by default
+---
 version: 0.11
 date:    Thu Jan 27 00:08:47 EST 2011
 changes:

@@ -10,8 +10,6 @@ SYNOPSIS
             HTTP_COOKIE: some cookie text
         - prefix: /google/
           remote: http://www.google.com/search?q=
-          env:
-            PATH_INFO: ''
         ...
 
         builder {
@@ -38,7 +36,7 @@ PARAMETERS
 
     remote (required)
         This is the remote URL to proxy to. The remainder of the incoming
-        URL is tacked onto this after the "prefix" is removed. See above.
+        URL is tacked onto this after the "prefix" is removed. (See above).
 
     preserve_host_header (optional)
         Accepted values are 0 (default) or 1. Passed through to
@@ -50,10 +48,14 @@ PARAMETERS
         This is a hash ref that will be merged into the current plack "env"
         hash when the proxy is used.
 
-        Often times you need to use this to set PATH_INFO to an empty string
-        for the proxied sites to behave properly.
+        By default Proxymap will clear PATH_INFO, QUERY_STRING and
+        HTTP_COOKIE, which is usually what you want. To not clear anything,
+        set this option to a empty hash ref.
 
-        Also useful for cookie injection, should you need that.
+        Can be useful for cookie injection, should you need that.
+
+    debug (optional)
+        Set this to 1 to warn the remote url when performing a proxy.
 
 USAGE NOTE
     This module can make it trivial to do ajax calls from JavaScript to load

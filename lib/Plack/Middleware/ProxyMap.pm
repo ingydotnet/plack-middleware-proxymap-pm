@@ -3,46 +3,53 @@ use 5.008003;
 use strict;
 use warnings;
 use parent 'Plack::Middleware';
+use Plack::Util::Accessor qw(proxymap);
 use Plack::App::Proxy ();
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 use Carp ();
 
 # use XXX -with => 'YAML::XS';
 
 sub call {
-    my $self = shift;
-    my $original_env = shift;
-    my $proxymap = $self->{proxymap};
+    my ($self, $env) = @_;
+    my $proxymap = $self->proxymap;
     for my $entry (@$proxymap) {
         my (
             $prefix,
             $remote,
             $preserve_host_header,
-            $env,
+            $env_override,
+            $debug,
         ) = @{$entry}{qw(
             prefix
             remote
             preserve_host_header
             env
+            debug
         )};
         Carp::croak("'prefix' or 'remote' entry missing in ProxyMap entry")
             unless $prefix and $remote;
         $preserve_host_header ||= 0;
-        $env ||= {};
-        my $path = $original_env->{PATH_INFO};
-        if ($path =~ s/^\Q$prefix\E//) {
-            my $url = "$remote$path";
-            # TODO Add logging option.
-            # warn ">>> $url<";
+        $env_override ||= {
+            PATH_INFO => '',
+            QUERY_STRING => '',
+            HTTP_COOKIE => '',
+        };
+        my $request = $env->{REQUEST_URI};
+        if ($request =~ s/^\Q$prefix\E//) {
+            my $url = "$remote$request";
+            warn "Plack::Middleware::Proxymap proxying " .
+                "$env->{REQUEST_URI} to $url"
+                    if $debug;
             return Plack::App::Proxy->new(
                 remote => $url,
                 preserve_host_header => $preserve_host_header,
-            )->(+{%$original_env, %$env});
+            )->(+{%$env, %$env_override});
         }
     }
-    return $self->app->($original_env);
+    return $self->app->($env);
 }
 
 1;
@@ -63,8 +70,6 @@ Plack::Middleware::ProxyMap - Proxy Various URLs to Various Remotes
         HTTP_COOKIE: some cookie text
     - prefix: /google/
       remote: http://www.google.com/search?q=
-      env:
-        PATH_INFO: ''
     ...
 
     builder {
@@ -97,7 +102,7 @@ URL. (See below).
 =item remote (required)
 
 This is the remote URL to proxy to. The remainder of the incoming URL is
-tacked onto this after the C<prefix> is removed. See above.
+tacked onto this after the C<prefix> is removed. (See above).
 
 =item preserve_host_header (optional)
 
@@ -111,10 +116,15 @@ If a proxy is not working as expected, try playing with this option.
 This is a hash ref that will be merged into the current plack C<env>
 hash when the proxy is used.
 
-Often times you need to use this to set PATH_INFO to an empty string for
-the proxied sites to behave properly.
+By default Proxymap will clear PATH_INFO, QUERY_STRING and HTTP_COOKIE,
+which is usually what you want. To not clear anything, set this option
+to a empty hash ref.
 
-Also useful for cookie injection, should you need that.
+Can be useful for cookie injection, should you need that.
+
+=item debug (optional)
+
+Set this to 1 to warn the remote url when performing a proxy.
 
 =back
 
