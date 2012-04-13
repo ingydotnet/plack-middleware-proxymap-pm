@@ -22,12 +22,14 @@ sub call {
             $preserve_host_header,
             $env_override,
             $debug,
+            $backend,
         ) = @{$entry}{qw(
             prefix
             remote
             preserve_host_header
             env
             debug
+            backend
         )};
         Carp::croak("'prefix' or 'remote' entry missing in ProxyMap entry")
             unless $prefix and $remote;
@@ -37,6 +39,7 @@ sub call {
             QUERY_STRING => '',
             HTTP_COOKIE => '',
         };
+        $backend ||= 'AnyEvent::HTTP'; # Plack::App::Proxy's default
         my $request = $env->{REQUEST_URI};
         if ($request =~ s/^\Q$prefix\E//) {
             my $url = "$remote$request";
@@ -46,6 +49,7 @@ sub call {
             return Plack::App::Proxy->new(
                 remote => $url,
                 preserve_host_header => $preserve_host_header,
+                backend => $backend,
             )->(+{%$env, %$env_override});
         }
     }
@@ -121,6 +125,11 @@ which is usually what you want. To not clear anything, set this option
 to a empty hash ref.
 
 Can be useful for cookie injection, should you need that.
+
+=item backend (optional)
+
+Use this to specify an alternative backend for L<Plack::App::Proxy>. See
+that module for more info.
 
 =item debug (optional)
 
