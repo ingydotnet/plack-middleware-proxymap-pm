@@ -1,4 +1,10 @@
 ---
+version: 0.13
+date:    Sun Jul  6 08:20:03 PDT 2014
+changes:
+- Apply PR/1 to add `backend` option. @rhesa++
+- Switch to Zilla::Dist
+---
 version: 0.12
 date:    Wed Mar 23 12:30:02 CST 2011
 changes:
