@@ -1,7 +1,7 @@
 =meta: 0.0.1
 
 name: Plack-Middleware-ProxyMap
-version: 0.14
+version: 0.15
 abstract: Proxy Various URLs to Various Remotes
 homepage: https://metacpan.org/release/Plack-Middleware-ProxyMap
 
@@ -24,6 +24,8 @@ requires:
 devel:
   git: https://github.com/ingydotnet/plack-middleware-proxymap-pm
   bug: https://github.com/ingydotnet/plack-middleware-proxymap-pm/issues
-  irc: irc.freenode.net#ingy
+  irc: irc.freenode.net#pkg
 
-=travis: perl
+=travis:
+  type: perl
+  irc: irc.freenode.net#pkg
