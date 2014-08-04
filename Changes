@@ -1,4 +1,9 @@
 ---
+version: 0.16
+date:    Mon Aug  4 00:22:35 PDT 2014
+changes:
+- Remove old README and update files.
+---
 version: 0.15
 date:    Wed Jul 30 16:06:44 PDT 2014
 changes:
