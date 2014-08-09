@@ -1,7 +1,7 @@
 =meta: 0.0.1
 
 name: Plack-Middleware-ProxyMap
-version: 0.16
+version: 0.17
 abstract: Proxy Various URLs to Various Remotes
 homepage: https://metacpan.org/release/Plack-Middleware-ProxyMap
 

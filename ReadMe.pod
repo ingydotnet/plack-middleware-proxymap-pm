@@ -108,7 +108,7 @@ module.
 
 Ingy döt Net <ingy@cpan.org>
 
-=head1 Copyright and License
+=head1 COPYRIGHT AND LICENSE
 
 Copyright 2011-2014. Ingy döt Net.
 
