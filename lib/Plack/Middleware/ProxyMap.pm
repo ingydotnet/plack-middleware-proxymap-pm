@@ -1,6 +1,6 @@
 use strict; use warnings;
 package Plack::Middleware::ProxyMap;
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 
 use parent 'Plack::Middleware';
 use Plack::Util::Accessor qw(proxymap);
